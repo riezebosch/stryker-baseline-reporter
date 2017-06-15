@@ -35,8 +35,12 @@
     "@types/chai": "^4.0.0",
     "@types/lodash": "^4.14.66",
     "@types/mocha": "^2.2.41",
+    "@types/sinon": "^2.3.1",
+    "@types/sinon-chai": "^2.7.28",
     "chai": "^4.0.2",
     "mocha": "^3.4.2",
+    "sinon": "^2.3.4",
+    "sinon-chai": "^2.11.0",
     "stryker": "^0.6.4",
     "stryker-api": "^0.5.3",
     "stryker-mocha-framework": "^0.1.2",
@@ -46,7 +50,10 @@
     "typescript": "^2.3.4"
   },
   "dependencies": {
+    "@types/mz": "0.0.31",
     "lodash": "^4.17.4",
-    "stryker-api": "^0.5.3"
+    "mz": "^2.6.0",
+    "stryker-api": "^0.5.3",
+    "tempy": "^0.1.0"
   }
 }
