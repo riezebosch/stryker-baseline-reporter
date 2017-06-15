@@ -1,0 +1,37 @@
+{
+  "name": "stryker-baseline-reporter",
+  "version": "0.0.1",
+  "description": "Reporting newly discovered mutants for Stryker",
+  "main": "src/Index.js",
+  "scripts": {
+    "lint": "tslint -p .",
+    "prepublishOnly": "npm run build",
+    "build": "tsc -p .",
+    "postbuild": "npm run lint",
+    "pretest": "npm run build",
+    "test": "mocha --recursive",
+    "stryker": "stryker run stryker.conf.js",
+    "start": "tsc -w -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riezebosch/stryker-baseline-reporter.git"
+  },
+  "keywords": [
+    "stryker",
+    "stryker-plugin",
+    "stryker-reporter",
+    "mutation",
+    "testing",
+    "baseline"
+  ],
+  "author": "Manuel Riezebosch",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/riezebosch/stryker-baseline-reporter/issues"
+  },
+  "homepage": "https://github.com/riezebosch/stryker-baseline-reporter#readme",
+  "devDependencies": {
+    "tslib": "^1.7.1"
+  }
+}
