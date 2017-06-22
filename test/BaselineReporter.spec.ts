@@ -2,6 +2,7 @@ import BaselineReporter from '../src/BaselineReporter';
 import { MutantStatus, MutantResult } from 'stryker-api/report';
 import { expect } from 'chai';
 import * as fs from 'mz/fs';
+import * as sinon from "Sinon";
 const tempy = require('tempy');
 
 describe('BaselineReporter', () => {
@@ -88,7 +89,62 @@ describe('BaselineReporter', () => {
             let data = await fs.readFile(tmp, 'utf-8');
             expect(data).to.not.match(/"status":[^2]/g);
         });
-    })
+    });
+
+    describe('onAllMutantsTested', () => {
+        it('when no new mutants survived', () => {
+            let mutant = baseline();
+            let write = sinon.spy();
+
+            let sut = new BaselineReporter(undefined, [mutant], write);
+            sut.onAllMutantsTested([mutant]);
+
+            sinon.assert.calledWithMatch(write, /Good job!/);
+        });
+
+        it('when you killed some mutants', () => {
+            let mutant = baseline();
+            let write = sinon.spy();
+
+            let sut = new BaselineReporter(undefined, [mutant], write);
+            sut.onAllMutantsTested([]);
+
+            sinon.assert.calledWithMatch(write, /Great job!/);
+        });
+
+        it('reports new surviving mutants', () => {
+            let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, [], write);
+
+            let mutant = baseline();
+            sut.onAllMutantsTested([mutant]);
+
+            sinon.assert.calledWithMatch(write, /Shame on you!/);
+        });
+
+        it('ignores killed mutants', () => {
+            let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, [], write);
+            
+            let result = baseline();
+            result.status = MutantStatus.Killed;
+
+            sut.onAllMutantsTested([result]);
+
+            sinon.assert.calledWithMatch(write, /Good job/);
+        });
+
+        it('when you killed some and created some', () => {
+            let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, [baseline()], write);
+            
+            let result = baseline();
+            result.mutatedLines = result.mutatedLines + 'asdf';
+
+            sut.onAllMutantsTested([result]);
+            sinon.assert.calledWithMatch(write, /Mixed feelings/);
+        });
+    });
 });
 
 function baseline(): MutantResult {
