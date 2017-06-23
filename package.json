@@ -1,6 +1,6 @@
 {
   "name": "stryker-baseline-reporter",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "Reporting newly discovered mutants for Stryker",
   "main": "src/Index.js",
   "scripts": {
