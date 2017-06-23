@@ -55,5 +55,5 @@ export default class implements Reporter {
 }
 
 export function read(filename = 'stryker.baseline.js'): MutantResult[] {
-    return JSON.parse(fs.readFileSync(filename, 'utf-8'));
+    return fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, 'utf-8')) : [];
 }

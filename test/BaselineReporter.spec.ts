@@ -10,58 +10,56 @@ describe('BaselineReporter', () => {
     describe('compare', () => {
         it('returns true when mutant consists in baseline', () => {
             let sut = new BaselineReporter(undefined, []);
-            let mutant: MutantResult = baseline();
-
-            expect(sut.compare(baseline(), mutant)).to.be.true;
+            expect(sut.compare(mutant(), mutant())).to.be.true;
         });
 
         it('returns false when mutatedLines differs', () => {
             let sut = new BaselineReporter(undefined, []);
-            let mutant = baseline();
-            mutant.mutatedLines = 'asdf';
+            let lhs = mutant();
+            lhs.mutatedLines = 'asdf';
 
-            expect(sut.compare(baseline(), mutant)).to.be.false;
+            expect(sut.compare(lhs, mutant())).to.be.false;
         });
 
         it('returns false when originalLines differs', () => {
             let sut = new BaselineReporter(undefined, []);
-            let mutant = baseline();
-            mutant.originalLines = 'asdf';
+            let lhs = mutant();
+            lhs.originalLines = 'asdf';
 
-            expect(sut.compare(baseline(), mutant)).to.be.false;
+            expect(sut.compare(lhs, mutant())).to.be.false;
         });
 
         it('returns false when mutator differs', () => {
             let sut = new BaselineReporter(undefined, []);
-            let mutant = baseline();
-            mutant.mutatorName = 'asdf';
+            let lhs = mutant();
+            lhs.mutatorName = 'asdf';
 
-            expect(sut.compare(baseline(), mutant)).to.be.false;
+            expect(sut.compare(lhs, mutant())).to.be.false;
         });
 
         it('returns false when source file differs', () => {
             let sut = new BaselineReporter(undefined, []);
-            let mutant = baseline();
-            mutant.sourceFilePath = 'asdf';
+            let lhs = mutant();
+            lhs.sourceFilePath = 'asdf';
 
-            expect(sut.compare(baseline(), mutant)).to.be.false;
+            expect(sut.compare(lhs, mutant())).to.be.false;
         });
     });
 
     describe('onAllMutantsTested', () => {
         it('when no new mutants survived', () => {
             let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, [mutant()], write);
 
-            let sut = new BaselineReporter(undefined, [baseline()], write);
-            sut.onAllMutantsTested([baseline()]);
+            sut.onAllMutantsTested([mutant()]);
 
             sinon.assert.calledWithMatch(write, /Good job!/);
         });
 
         it('when you killed some mutants', () => {
             let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, [mutant()], write);
 
-            let sut = new BaselineReporter(undefined, [baseline()], write);
             sut.onAllMutantsTested([]);
 
             sinon.assert.calledWithMatch(write, /Great job!/);
@@ -70,8 +68,7 @@ describe('BaselineReporter', () => {
         it('reports new surviving mutants', () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [], write);
-
-            sut.onAllMutantsTested([baseline()]);
+            sut.onAllMutantsTested([mutant()]);
 
             sinon.assert.calledWithMatch(write, /Shame on you!/);
         });
@@ -80,9 +77,8 @@ describe('BaselineReporter', () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [], write);
 
-            let result = baseline();
+            let result = mutant();
             result.status = MutantStatus.Killed;
-
             sut.onAllMutantsTested([result]);
 
             sinon.assert.calledWithMatch(write, /Good job/);
@@ -90,12 +86,12 @@ describe('BaselineReporter', () => {
 
         it('when you killed some and created some', () => {
             let write = sinon.spy();
-            let sut = new BaselineReporter(undefined, [baseline()], write);
+            let sut = new BaselineReporter(undefined, [mutant()], write);
 
-            let result = baseline();
+            let result = mutant();
             result.mutatedLines = result.mutatedLines + 'asdf';
-
             sut.onAllMutantsTested([result]);
+
             sinon.assert.calledWithMatch(write, /Mixed feelings/);
         });
     });
@@ -104,9 +100,7 @@ describe('BaselineReporter', () => {
         it('saves the new list', async () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [], write);
-
-            let mutant = baseline();
-            sut.onAllMutantsTested([mutant]);
+            sut.onAllMutantsTested([mutant()]);
 
             await sut.wrapUp();
             sinon.assert.calledWithMatch(write, /Saved a new/);
@@ -114,9 +108,7 @@ describe('BaselineReporter', () => {
 
         it('saves the new list', async () => {
             let sut = new BaselineReporter(undefined, [], (_) => { });
-
-            let mutant = baseline();
-            sut.onAllMutantsTested([mutant]);
+            sut.onAllMutantsTested([mutant()]);
 
             await sut.wrapUp();
 
@@ -125,11 +117,17 @@ describe('BaselineReporter', () => {
     });
 
     describe('read', () => {
-        expect(read(path.join(__dirname, 'test.baseline.js'))).to.not.empty;
+        it('is not empty', () => {
+            expect(read(path.join(__dirname, 'test.baseline.js'))).to.not.empty;
+        });
+
+        it('nothing when no file', () => {
+            expect(read('asdf')).to.deep.eq([]);
+        });
     });
 });
 
-function baseline(): MutantResult {
+function mutant(): MutantResult {
     return {
         location: { start: { line: 0, column: 0 }, end: { line: 0, column: 0 } },
         mutatedLines: '',
