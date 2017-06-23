@@ -1,21 +1,22 @@
 import BaselineReporter from '../src/BaselineReporter';
+import { read } from '../src/BaselineReporter';
 import { MutantStatus, MutantResult } from 'stryker-api/report';
 import { expect } from 'chai';
 import * as fs from 'mz/fs';
 import * as sinon from "Sinon";
-const tempy = require('tempy');
+import * as path from 'path';
 
 describe('BaselineReporter', () => {
     describe('compare', () => {
         it('returns true when mutant consists in baseline', () => {
-            let sut = new BaselineReporter();
+            let sut = new BaselineReporter(undefined, []);
             let mutant: MutantResult = baseline();
 
             expect(sut.compare(baseline(), mutant)).to.be.true;
         });
 
         it('returns false when mutatedLines differs', () => {
-            let sut = new BaselineReporter();
+            let sut = new BaselineReporter(undefined, []);
             let mutant = baseline();
             mutant.mutatedLines = 'asdf';
 
@@ -23,7 +24,7 @@ describe('BaselineReporter', () => {
         });
 
         it('returns false when originalLines differs', () => {
-            let sut = new BaselineReporter();
+            let sut = new BaselineReporter(undefined, []);
             let mutant = baseline();
             mutant.originalLines = 'asdf';
 
@@ -31,7 +32,7 @@ describe('BaselineReporter', () => {
         });
 
         it('returns false when mutator differs', () => {
-            let sut = new BaselineReporter();
+            let sut = new BaselineReporter(undefined, []);
             let mutant = baseline();
             mutant.mutatorName = 'asdf';
 
@@ -39,7 +40,7 @@ describe('BaselineReporter', () => {
         });
 
         it('returns false when source file differs', () => {
-            let sut = new BaselineReporter();
+            let sut = new BaselineReporter(undefined, []);
             let mutant = baseline();
             mutant.sourceFilePath = 'asdf';
 
@@ -47,66 +48,20 @@ describe('BaselineReporter', () => {
         });
     });
 
-    describe('save', () => {
-        let tmp: string;
-
-        beforeEach(() => {
-            tmp = tempy.file({ ext: '.json' });
-        });
-
-        afterEach(async () => {
-            if (await fs.exists(tmp)) {
-                await fs.unlink(tmp);
-            }
-        });
-
-        it('stores in a json file', async () => {
-            let sut = new BaselineReporter();
-
-            await sut.save([], tmp);
-            expect(await fs.exists(tmp)).to.be.true;
-        });
-
-        it('stores all received mutant results', async () => {
-            let sut = new BaselineReporter();
-
-            await sut.save([baseline()], tmp);
-            expect(await fs.exists(tmp)).to.be.true;
-
-            let data = await fs.readFile(tmp, 'utf-8');
-            expect(data).to.match(/mutatedLines/g);
-        });
-
-        it('filters surviving mutants', async () => {
-            let killed = baseline();
-            killed.status = MutantStatus.Killed;
-
-            let sut = new BaselineReporter();
-
-            await sut.save([baseline(), killed], tmp);
-            expect(await fs.exists(tmp)).to.be.true;
-
-            let data = await fs.readFile(tmp, 'utf-8');
-            expect(data).to.not.match(/"status":[^2]/g);
-        });
-    });
-
     describe('onAllMutantsTested', () => {
         it('when no new mutants survived', () => {
-            let mutant = baseline();
             let write = sinon.spy();
 
-            let sut = new BaselineReporter(undefined, [mutant], write);
-            sut.onAllMutantsTested([mutant]);
+            let sut = new BaselineReporter(undefined, [baseline()], write);
+            sut.onAllMutantsTested([baseline()]);
 
             sinon.assert.calledWithMatch(write, /Good job!/);
         });
 
         it('when you killed some mutants', () => {
-            let mutant = baseline();
             let write = sinon.spy();
 
-            let sut = new BaselineReporter(undefined, [mutant], write);
+            let sut = new BaselineReporter(undefined, [baseline()], write);
             sut.onAllMutantsTested([]);
 
             sinon.assert.calledWithMatch(write, /Great job!/);
@@ -116,16 +71,15 @@ describe('BaselineReporter', () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [], write);
 
-            let mutant = baseline();
-            sut.onAllMutantsTested([mutant]);
+            sut.onAllMutantsTested([baseline()]);
 
             sinon.assert.calledWithMatch(write, /Shame on you!/);
         });
 
-        it('ignores killed mutants', () => {
+        it('only compares surviving mutants', () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [], write);
-            
+
             let result = baseline();
             result.status = MutantStatus.Killed;
 
@@ -137,13 +91,41 @@ describe('BaselineReporter', () => {
         it('when you killed some and created some', () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [baseline()], write);
-            
+
             let result = baseline();
             result.mutatedLines = result.mutatedLines + 'asdf';
 
             sut.onAllMutantsTested([result]);
             sinon.assert.calledWithMatch(write, /Mixed feelings/);
         });
+    });
+
+    describe('wrapUp()', () => {
+        it('saves the new list', async () => {
+            let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, [], write);
+
+            let mutant = baseline();
+            sut.onAllMutantsTested([mutant]);
+
+            await sut.wrapUp();
+            sinon.assert.calledWithMatch(write, /Saved a new/);
+        });
+
+        it('saves the new list', async () => {
+            let sut = new BaselineReporter(undefined, [], (_) => { });
+
+            let mutant = baseline();
+            sut.onAllMutantsTested([mutant]);
+
+            await sut.wrapUp();
+
+            expect(await (fs.exists(sut.filename))).to.true;
+        });
+    });
+
+    describe('read', () => {
+        expect(read(path.join(__dirname, 'test.baseline.js'))).to.not.empty;
     });
 });
 
