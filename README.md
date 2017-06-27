@@ -19,3 +19,6 @@ module.exports = function (config) {
 ```
 
 Run!
+
+## Note!
+As of writing there is [an issue](https://github.com/stryker-mutator/stryker/issues/291) with stryker where test runs *can be* inconsistent. Of course this is terrible for this reporter because it will impact the outcome.

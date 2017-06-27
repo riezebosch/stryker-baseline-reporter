@@ -3,7 +3,7 @@ import { read } from '../src/BaselineReporter';
 import { MutantStatus, MutantResult } from 'stryker-api/report';
 import { expect } from 'chai';
 import * as fs from 'mz/fs';
-import * as sinon from "Sinon";
+import * as sinon from 'Sinon';
 import * as path from 'path';
 
 describe('BaselineReporter', () => {
@@ -47,6 +47,21 @@ describe('BaselineReporter', () => {
     });
 
     describe('onAllMutantsTested', () => {
+        let own = 'stryker.baseline.js';
+        let bak = 'stryker.baseline.bak';
+
+        before(async () => {
+            if (await fs.exists(own)) {
+                await fs.rename(own, bak);
+            }
+        });
+
+        after(async () => {
+            if (await fs.exists(bak)) {
+                await fs.rename(bak, own);
+            }
+        });
+
         it('when no new mutants survived', () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [mutant()], write);
@@ -73,6 +88,17 @@ describe('BaselineReporter', () => {
             sinon.assert.calledWithMatch(write, /Shame on you!/);
         });
 
+        it('also reports no coverage mutants', () => {
+            let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, [], write);
+
+            let result = mutant();
+            result.status = MutantStatus.NoCoverage;
+            sut.onAllMutantsTested([result]);
+
+            sinon.assert.calledWithMatch(write, /Shame on you!/);
+        });
+
         it('only compares surviving mutants', () => {
             let write = sinon.spy();
             let sut = new BaselineReporter(undefined, [], write);
@@ -93,6 +119,24 @@ describe('BaselineReporter', () => {
             sut.onAllMutantsTested([result]);
 
             sinon.assert.calledWithMatch(write, /Mixed feelings/);
+        });
+
+        it('reports mildly when no baseline file was found', () => {
+            let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, undefined, write);
+
+            sut.onAllMutantsTested([mutant()]);
+
+            sinon.assert.calledWithMatch(write, /No hard feelings/);
+        });
+
+        it('reports with great joy when no baseline is needed', () => {
+            let write = sinon.spy();
+            let sut = new BaselineReporter(undefined, undefined, write);
+
+            sut.onAllMutantsTested([]);
+
+            sinon.assert.calledWithMatch(write, /You guys rock!/);
         });
     });
 
@@ -122,7 +166,7 @@ describe('BaselineReporter', () => {
         });
 
         it('nothing when no file', () => {
-            expect(read('asdf')).to.deep.eq([]);
+            expect(read('asdf')).to.eq(undefined);
         });
     });
 });
@@ -138,5 +182,5 @@ function mutant(): MutantResult {
         testsRan: [''],
         status: MutantStatus.Survived,
         range: [0, 0]
-    }
+    };
 }
