@@ -1,7 +1,7 @@
 {
   "name": "stryker-baseline-reporter",
-  "version": "1.0.0",
-  "description": "Reporting newly discovered mutants for Stryker",
+  "version": "1.0.1",
+  "description": "Report improvement (or retrogression) on your mutation score with Stryker",
   "main": "src/Index.js",
   "scripts": {
     "lint": "tslint -p .",

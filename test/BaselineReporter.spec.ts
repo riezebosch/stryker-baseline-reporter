@@ -136,7 +136,7 @@ describe('BaselineReporter', () => {
 
             sut.onAllMutantsTested([]);
 
-            sinon.assert.calledWithMatch(write, /You guys rock!/);
+            sinon.assert.calledWithMatch(write, /You rock!/);
         });
     });
 

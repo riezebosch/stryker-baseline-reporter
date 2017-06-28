@@ -40,12 +40,12 @@ export default class implements Reporter {
 
     private ReportWithNoBaselineFile(surviving: MutantResult[]) {
         if (surviving.length > 0) {
-            this.write(chalk.yellow(chalk.bold('No hard feelings.'), 'Mutants survived but it may be it is not your fault after all.'));
-            this.write('There was no baseline. Mind though that including a baseline file at this point will let the mutants live on forever...');
-            this.write('Overwrite your baseline file with the one mentioned at the end of this log.');
+            this.write(chalk.yellow(chalk.bold('No hard feelings.'), 'Mutants survived but it may be not your fault after all.'));
+            this.write('Copy the baseline file mentioned at the end of this log to the root dir of your project.');
+            this.write('Mind though that including a baseline file at this point will let them live on forever...');
         } else {
-            this.write(chalk.yellow(chalk.green('You guys rock!'), 'No surviving mutants at all.'));
-            this.write('Who needs a baseline file anyway.');
+            this.write(chalk.yellow(chalk.green('You rock!'), 'No surviving mutants at all.'));
+            this.write('Who needs a baseline file anyway?!');
         }
     }
 
@@ -61,11 +61,11 @@ export default class implements Reporter {
 
     private ReportNoNewSurvivingMutants(surviving: MutantResult[], baseline: MutantResult[]) {
         if (surviving.length === baseline.length) {
-            this.write(chalk.green(chalk.bold('Good job!'), 'At least you did not introduce new mutants.'));
+            this.write(chalk.green(chalk.bold('Good job!'), 'At least you didn\'t create new surviving mutants.'));
         } else {
-            this.write(chalk.green(chalk.bold('Great job!'), 'You killed some mutants that someone other than you created.'));
+            this.write(chalk.green(chalk.bold('Great job!'), 'You killed some mutants that survived before.'));
             this.write('You should update the baseline file right now!');
-            this.write('Go ahead, overwrite your baseline file with the one mentioned at the end of this log.');
+            this.write('Overwrite your baseline file with the one mentioned at the end of this log.');
         }
     }
 
@@ -73,10 +73,10 @@ export default class implements Reporter {
         let gone = _.differenceWith(baseline, surviving, (lhs: MutantResult, rhs: MutantResult) => this.compare(lhs, rhs));
         if (gone.length === 0) {
             this.write(chalk.red(chalk.bold('Shame on you!'), 'New mutants survived. Let\'s go kill them!'));
-            this.write('If you just can\'t fix them you should update the baseline file now.');
+            this.write('If you can\'t kill them you should update the baseline file.');
         } else {
-            this.write(chalk.yellow(chalk.bold('Mixed feelings.'), 'You killed some mutants but also introduced some.'));
-            this.write('Mind that updating the baseline file will let them live forever...');
+            this.write(chalk.yellow(chalk.bold('Mixed feelings.'), 'You killed some mutants but also created some new surviving.'));
+            this.write('Mind that updating the baseline file now will let them live on forever...');
         }
 
         this.write('Overwrite your baseline file with the one mentioned at the end of this log.');
