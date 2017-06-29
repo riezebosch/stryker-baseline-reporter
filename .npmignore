@@ -1,9 +1,5 @@
 **/*
-!bin/**
-!src/**
+!src/**.js
+!src/**.d.ts
 !package.json
 !README.md
-**/*.ts
-!**/*.d.ts
-**/*.tsx
-**/*.js.maps
