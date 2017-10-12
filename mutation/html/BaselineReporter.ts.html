@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html><head><title>BaselineReporter.ts
+ - Stryker report</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="__resources/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="__resources/highlightjs/styles/default.css">
+<link rel="stylesheet" href="__resources/stryker.css"></head>
+<body><img class="stryker-image" alt="Stryker" src="__resources/stryker-80x80.png">
+<div class="container-fluid"><div class="row"><div class="col-lg-12"><h1 class="display-4">BaselineReporter.ts
+ 
+<small class="text-muted">- Stryker report</small></h1></div></div>
+<ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.html">All files</a></li>
+<li class="breadcrumb-item active">BaselineReporter.ts</li></ol>
+<div class="row"><div class="col-lg-12"><div class="row"><div class="col-sm-11"><table class="table table-sm table-hover table-bordered table-no-top"><thead><tr><th style="width: 20%"><div><span>File / Directory</span></div></th>
+<th colspan="2"><div><span>Mutation score</span></div></th>
+<th class="rotate text-center" style="width: 50px"><div><span># Killed</span></div></th>
+<th class="rotate text-center" style="width: 50px"><div><span># Survived</span></div></th>
+<th class="rotate text-center" style="width: 50px"><div><span># Timeout</span></div></th>
+<th class="rotate text-center" style="width: 50px"><div><span># No coverage</span></div></th>
+<th class="rotate text-center" style="width: 50px"><div><span># Runtime errors</span></div></th>
+<th class="rotate text-center" style="width: 50px"><div><span># Transpile errors</span></div></th>
+<th class="rotate rotate-width-70 text-center" style="width: 70px"><div><span>Total detected</span></div></th>
+<th class="rotate rotate-width-70 text-center" style="width: 70px"><div><span>Total undetected</span></div></th>
+<th class="rotate rotate-width-70 text-center" style="width: 70px"><div><span>Total mutants</span></div></th></tr></thead>
+<tbody><tr><td>BaselineReporter.ts</td>
+<td><div class="progress"><div class="progress-bar bg-success" role="progressbar" aria-valuenow="100.00" aria-valuemin="0" aria-valuemax="100" style="width: 100.00%;">100.00
+%</div></div></td>
+<th class="text-center text-success" style="width: 10%">100.00</th>
+<td class="text-center">39</td>
+<td class="text-center">0</td>
+<td class="text-center">0</td>
+<td class="text-center">0</td>
+<td class="text-center">0</td>
+<td class="text-center">7</td>
+<th class="text-center">39</th>
+<th class="text-center">0</th>
+<th class="text-center">46</th></tr>
+</tbody></table></div></div>
+<div class="row"><div class="col-lg-7"><div class="row legend"><form class="col-md-12" novalidate="novalidate">
+
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input stryker-display" value="1" type="checkbox">
+Killed
+ 
+(39)</label></div>
+
+
+<div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input stryker-display" value="5" type="checkbox">
+TranspileError
+ 
+(7)</label></div>
+<a href="#" class="stryker-collapse-expand-all">Expand all</a></form></div>
+<pre><code class="lang-javascript"><span class="bg-null">import { MutantResult, Reporter, MutantStatus } from &#039;stryker-api/report&#039;;
+
+import * as fs from &#039;mz/fs&#039;;
+import * as chalk from &#039;chalk&#039;;
+import { StrykerOptions } from &#039;stryker-api/core&#039;;
+import * as _ from &#039;lodash&#039;;
+const tempy = require(&#039;tempy&#039;);
+import * as path from &#039;path&#039;;
+
+export default class implements Reporter {
+    surviving: MutantResult[];
+    public filename = path.join(tempy.directory(), &#039;stryker.baseline.js&#039;);
+
+    constructor(_?: StrykerOptions,
+        private baseline: MutantResult[] | undefined = read(),
+        private write: (data: string) =&gt; void = console.log) {
+    }
+
+    public onAllMutantsTested(results: MutantResult[]): void </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="0"><span class="badge badge-success">0</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="0">{}</span><span class="stryker-original-code" data-mutant="0"><span class="bg-success-light">{
+        this.surviving = results.filter(_ =&gt; _.status </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: TranspileError" data-mutant-status-annotation="secondary" data-mutant-status="5" data-mutant="1"><span class="badge badge-secondary">1</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="1">!==</span><span class="stryker-original-code" data-mutant="1"><span class="bg-success-light">===</span></span><span class="bg-success-light"> MutantStatus.Survived </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: TranspileError" data-mutant-status-annotation="secondary" data-mutant-status="5" data-mutant="2"><span class="badge badge-secondary">2</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="2">&amp;&amp;</span><span class="stryker-original-code" data-mutant="2"><span class="bg-success-light">||</span></span><span class="bg-success-light"> _.status </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="3"><span class="badge badge-success">3</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="3">!==</span><span class="stryker-original-code" data-mutant="3"><span class="bg-success-light">===</span></span><span class="bg-success-light"> MutantStatus.NoCoverage);
+
+        if (</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: TranspileError" data-mutant-status-annotation="secondary" data-mutant-status="5" data-mutant="4"><span class="badge badge-secondary">4</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="4">true</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: TranspileError" data-mutant-status-annotation="secondary" data-mutant-status="5" data-mutant="5"><span class="badge badge-secondary">5</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="5">false</span><a href="#" class="stryker-mutant-button" tabindex="0" title="UnaryNot" data-content="status: TranspileError" data-mutant-status-annotation="secondary" data-mutant-status="5" data-mutant="6"><span class="badge badge-secondary">6</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="6">this.baseline</span><a href="#" class="stryker-mutant-button" tabindex="0" title="PrefixUnaryExpression" data-content="status: TranspileError" data-mutant-status-annotation="secondary" data-mutant-status="5" data-mutant="7"><span class="badge badge-secondary">7</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="7">this.baseline</span><span class="stryker-original-code" data-mutant="4"><span class="stryker-original-code" data-mutant="5"><span class="stryker-original-code" data-mutant="6"><span class="stryker-original-code" data-mutant="7"><span class="bg-success-light">!this.baseline</span></span></span></span></span><span class="bg-success-light">) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="8"><span class="badge badge-success">8</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="8">{}</span><span class="stryker-original-code" data-mutant="8"><span class="bg-success-light">{
+            this.ReportWithNoBaselineFile(this.surviving);
+        }</span></span><span class="bg-success-light"> else </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="9"><span class="badge badge-success">9</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="9">{}</span><span class="stryker-original-code" data-mutant="9"><span class="bg-success-light">{
+            this.ReportDifferenceWithBaseline(this.surviving, this.baseline);
+        }</span></span><span class="bg-success-light">
+    }</span></span><span class="bg-null">
+
+    public async wrapUp(): Promise&lt;void&gt; </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="10"><span class="badge badge-success">10</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="10">{}</span><span class="stryker-original-code" data-mutant="10"><span class="bg-success-light">{
+        this.write(`Saved a new baseline file: ${this.filename}`);
+        await fs.writeFile(this.filename, JSON.stringify(this.surviving));
+    }</span></span><span class="bg-null">
+
+    public compare(lhs: MutantResult, rhs: MutantResult) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="11"><span class="badge badge-success">11</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="11">{}</span><span class="stryker-original-code" data-mutant="11"><span class="bg-success-light">{
+        return lhs.mutatedLines </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="12"><span class="badge badge-success">12</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="12">!==</span><span class="stryker-original-code" data-mutant="12"><span class="bg-success-light">===</span></span><span class="bg-success-light"> rhs.mutatedLines
+            </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="13"><span class="badge badge-success">13</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="13">||</span><span class="stryker-original-code" data-mutant="13"><span class="bg-success-light">&amp;&amp;</span></span><span class="bg-success-light"> lhs.originalLines </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="14"><span class="badge badge-success">14</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="14">!==</span><span class="stryker-original-code" data-mutant="14"><span class="bg-success-light">===</span></span><span class="bg-success-light"> rhs.originalLines
+            </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="15"><span class="badge badge-success">15</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="15">||</span><span class="stryker-original-code" data-mutant="15"><span class="bg-success-light">&amp;&amp;</span></span><span class="bg-success-light"> lhs.mutatorName </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="16"><span class="badge badge-success">16</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="16">!==</span><span class="stryker-original-code" data-mutant="16"><span class="bg-success-light">===</span></span><span class="bg-success-light"> rhs.mutatorName
+            </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="17"><span class="badge badge-success">17</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="17">||</span><span class="stryker-original-code" data-mutant="17"><span class="bg-success-light">&amp;&amp;</span></span><span class="bg-success-light"> lhs.sourceFilePath </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="18"><span class="badge badge-success">18</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="18">!==</span><span class="stryker-original-code" data-mutant="18"><span class="bg-success-light">===</span></span><span class="bg-success-light"> rhs.sourceFilePath;
+    }</span></span><span class="bg-null">
+
+    private ReportWithNoBaselineFile(surviving: MutantResult[]) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="19"><span class="badge badge-success">19</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="19">{}</span><span class="stryker-original-code" data-mutant="19"><span class="bg-success-light">{
+        if (</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="20"><span class="badge badge-success">20</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="20">false</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="21"><span class="badge badge-success">21</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="21">true</span><span class="stryker-original-code" data-mutant="20"><span class="stryker-original-code" data-mutant="21"><span class="bg-success-light">surviving.length </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="22"><span class="badge badge-success">22</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="22">&lt;=</span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="23"><span class="badge badge-success">23</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="23">&gt;=</span><span class="stryker-original-code" data-mutant="22"><span class="stryker-original-code" data-mutant="23"><span class="bg-success-light">&gt;</span></span></span><span class="bg-success-light"> 0</span></span></span><span class="bg-success-light">) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="24"><span class="badge badge-success">24</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="24">{}</span><span class="stryker-original-code" data-mutant="24"><span class="bg-success-light">{
+            this.write(chalk.yellow(chalk.bold(&#039;No hard feelings.&#039;), &#039;Mutants survived but it may be not your fault after all.&#039;));
+            this.write(&#039;Copy the baseline file mentioned at the end of this log to the root dir of your project.&#039;);
+            this.write(&#039;Mind though that including a baseline file at this point will let them live on forever...&#039;);
+        }</span></span><span class="bg-success-light"> else </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="25"><span class="badge badge-success">25</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="25">{}</span><span class="stryker-original-code" data-mutant="25"><span class="bg-success-light">{
+            this.write(chalk.yellow(chalk.green(&#039;You rock!&#039;), &#039;No surviving mutants at all.&#039;));
+            this.write(&#039;Who needs a baseline file anyway?!&#039;);
+        }</span></span><span class="bg-success-light">
+    }</span></span><span class="bg-null">
+
+    private ReportDifferenceWithBaseline(surviving: MutantResult[], baseline: MutantResult[]) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="26"><span class="badge badge-success">26</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="26">{}</span><span class="stryker-original-code" data-mutant="26"><span class="bg-success-light">{
+        let fresh = _.differenceWith(surviving, this.baseline, (lhs: MutantResult, rhs: MutantResult) =&gt; this.compare(lhs, rhs));
+
+        if (</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="27"><span class="badge badge-success">27</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="27">true</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="28"><span class="badge badge-success">28</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="28">false</span><span class="stryker-original-code" data-mutant="27"><span class="stryker-original-code" data-mutant="28"><span class="bg-success-light">fresh.length </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="29"><span class="badge badge-success">29</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="29">!==</span><span class="stryker-original-code" data-mutant="29"><span class="bg-success-light">===</span></span><span class="bg-success-light"> 0</span></span></span><span class="bg-success-light">) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="30"><span class="badge badge-success">30</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="30">{}</span><span class="stryker-original-code" data-mutant="30"><span class="bg-success-light">{
+            this.ReportNoNewSurvivingMutants(surviving, baseline);
+        }</span></span><span class="bg-success-light"> else </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="31"><span class="badge badge-success">31</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="31">{}</span><span class="stryker-original-code" data-mutant="31"><span class="bg-success-light">{
+            this.ReportNewSurvivingMutants(surviving, baseline);
+        }</span></span><span class="bg-success-light">
+    }</span></span><span class="bg-null">
+
+    private ReportNoNewSurvivingMutants(surviving: MutantResult[], baseline: MutantResult[]) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="32"><span class="badge badge-success">32</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="32">{}</span><span class="stryker-original-code" data-mutant="32"><span class="bg-success-light">{
+        if (</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="33"><span class="badge badge-success">33</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="33">true</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="34"><span class="badge badge-success">34</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="34">false</span><span class="stryker-original-code" data-mutant="33"><span class="stryker-original-code" data-mutant="34"><span class="bg-success-light">surviving.length </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="35"><span class="badge badge-success">35</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="35">!==</span><span class="stryker-original-code" data-mutant="35"><span class="bg-success-light">===</span></span><span class="bg-success-light"> baseline.length</span></span></span><span class="bg-success-light">) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="36"><span class="badge badge-success">36</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="36">{}</span><span class="stryker-original-code" data-mutant="36"><span class="bg-success-light">{
+            this.write(chalk.green(chalk.bold(&#039;Good job!&#039;), &#039;At least you didn\&#039;t create new surviving mutants.&#039;));
+        }</span></span><span class="bg-success-light"> else </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="37"><span class="badge badge-success">37</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="37">{}</span><span class="stryker-original-code" data-mutant="37"><span class="bg-success-light">{
+            this.write(chalk.green(chalk.bold(&#039;Great job!&#039;), &#039;You killed some mutants that survived before.&#039;));
+            this.write(&#039;You should update the baseline file right now!&#039;);
+            this.write(&#039;Overwrite your baseline file with the one mentioned at the end of this log.&#039;);
+        }</span></span><span class="bg-success-light">
+    }</span></span><span class="bg-null">
+
+    private ReportNewSurvivingMutants(surviving: MutantResult[], baseline: MutantResult[]) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="38"><span class="badge badge-success">38</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="38">{}</span><span class="stryker-original-code" data-mutant="38"><span class="bg-success-light">{
+        let gone = _.differenceWith(baseline, surviving, (lhs: MutantResult, rhs: MutantResult) =&gt; this.compare(lhs, rhs));
+        if (</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="39"><span class="badge badge-success">39</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="39">true</span><a href="#" class="stryker-mutant-button" tabindex="0" title="IfStatement" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="40"><span class="badge badge-success">40</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="40">false</span><span class="stryker-original-code" data-mutant="39"><span class="stryker-original-code" data-mutant="40"><span class="bg-success-light">gone.length </span><a href="#" class="stryker-mutant-button" tabindex="0" title="BinaryExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="41"><span class="badge badge-success">41</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="41">!==</span><span class="stryker-original-code" data-mutant="41"><span class="bg-success-light">===</span></span><span class="bg-success-light"> 0</span></span></span><span class="bg-success-light">) </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="42"><span class="badge badge-success">42</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="42">{}</span><span class="stryker-original-code" data-mutant="42"><span class="bg-success-light">{
+            this.write(chalk.red(chalk.bold(&#039;Shame on you!&#039;), &#039;New mutants survived. Let\&#039;s go kill them!&#039;));
+            this.write(&#039;If you can\&#039;t kill them you should update the baseline file.&#039;);
+        }</span></span><span class="bg-success-light"> else </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="43"><span class="badge badge-success">43</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="43">{}</span><span class="stryker-original-code" data-mutant="43"><span class="bg-success-light">{
+            this.write(chalk.yellow(chalk.bold(&#039;Mixed feelings.&#039;), &#039;You killed some mutants but also created some new surviving.&#039;));
+            this.write(&#039;Mind that updating the baseline file now will let them live on forever...&#039;);
+        }</span></span><span class="bg-success-light">
+
+        this.write(&#039;Overwrite your baseline file with the one mentioned at the end of this log.&#039;);
+    }</span></span><span class="bg-null">
+}
+
+export function read(filename = &#039;stryker.baseline.js&#039;): MutantResult[] | undefined </span><a href="#" class="stryker-mutant-button" tabindex="0" title="Block" data-content="status: TranspileError" data-mutant-status-annotation="secondary" data-mutant-status="5" data-mutant="44"><span class="badge badge-secondary">44</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="44">{}</span><span class="stryker-original-code" data-mutant="44"><span class="bg-null">{
+    return </span><a href="#" class="stryker-mutant-button" tabindex="0" title="ConditionalExpression" data-content="status: Killed" data-mutant-status-annotation="success" data-mutant-status="1" data-mutant="45"><span class="badge badge-success">45</span></a><span class="badge badge-info stryker-mutant-replacement" hidden="hidden" data-mutant="45">false</span><span class="stryker-original-code" data-mutant="45"><span class="bg-success-light">fs.existsSync(filename)</span></span><span class="bg-null"> ? JSON.parse(fs.readFileSync(filename, &#039;utf-8&#039;)) : undefined;
+</span>}</code></pre></div>
+<div class="col-lg-5"><table class="table table-sm table-hover"><thead><tr><th>#</th>
+<th>Mutator</th>
+<th>State</th>
+<th>Location</th>
+<th>Original</th>
+<th>Replacement</th></tr></thead>
+<tbody><tr><th>0</th>
+<td>BinaryExpression</td>
+<td>TranspileError</td>
+<td>19
+:
+80</td>
+<td><code>||</code></td>
+<td><code>&&</code></td></tr>
+<tr><th>1</th>
+<td>BinaryExpression</td>
+<td>TranspileError</td>
+<td>19
+:
+54</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>2</th>
+<td>IfStatement</td>
+<td>TranspileError</td>
+<td>21
+:
+12</td>
+<td><code>!    .</code></td>
+<td><code></code></td></tr>
+<tr><th>3</th>
+<td>IfStatement</td>
+<td>TranspileError</td>
+<td>21
+:
+12</td>
+<td><code>!    .</code></td>
+<td><code></code></td></tr>
+<tr><th>4</th>
+<td>UnaryNot</td>
+<td>TranspileError</td>
+<td>21
+:
+12</td>
+<td><code>!    .</code></td>
+<td><code>.</code></td></tr>
+<tr><th>5</th>
+<td>PrefixUnaryExpression</td>
+<td>TranspileError</td>
+<td>21
+:
+12</td>
+<td><code>!    .</code></td>
+<td><code>.</code></td></tr>
+<tr><th>6</th>
+<td>Block</td>
+<td>Killed</td>
+<td>18
+:
+61</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>7</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>36
+:
+12</td>
+<td><code>&&</code></td>
+<td><code>||</code></td></tr>
+<tr><th>8</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>35
+:
+12</td>
+<td><code>&&</code></td>
+<td><code>||</code></td></tr>
+<tr><th>9</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>34
+:
+32</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>10</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>19
+:
+92</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>11</th>
+<td>Block</td>
+<td>Killed</td>
+<td>23
+:
+15</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>12</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>35
+:
+33</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>13</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>37
+:
+34</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>14</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>36
+:
+31</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>15</th>
+<td>Block</td>
+<td>Killed</td>
+<td>21
+:
+28</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>16</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>37
+:
+12</td>
+<td><code>&&</code></td>
+<td><code>||</code></td></tr>
+<tr><th>17</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>41
+:
+12</td>
+<td><code>.       ></code></td>
+<td><code></code></td></tr>
+<tr><th>18</th>
+<td>Block</td>
+<td>Killed</td>
+<td>33
+:
+57</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>19</th>
+<td>Block</td>
+<td>Killed</td>
+<td>40
+:
+64</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>20</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>41
+:
+29</td>
+<td><code>></code></td>
+<td><code><=</code></td></tr>
+<tr><th>21</th>
+<td>Block</td>
+<td>Killed</td>
+<td>51
+:
+94</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>22</th>
+<td>Block</td>
+<td>Killed</td>
+<td>41
+:
+34</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>23</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>41
+:
+12</td>
+<td><code>.       ></code></td>
+<td><code></code></td></tr>
+<tr><th>24</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>41
+:
+29</td>
+<td><code>></code></td>
+<td><code>>=</code></td></tr>
+<tr><th>25</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>54
+:
+12</td>
+<td><code>.       ===</code></td>
+<td><code></code></td></tr>
+<tr><th>26</th>
+<td>Block</td>
+<td>Killed</td>
+<td>28
+:
+41</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>27</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>54
+:
+12</td>
+<td><code>.       ===</code></td>
+<td><code></code></td></tr>
+<tr><th>28</th>
+<td>Block</td>
+<td>Killed</td>
+<td>45
+:
+15</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>29</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>54
+:
+25</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>30</th>
+<td>Block</td>
+<td>Killed</td>
+<td>54
+:
+32</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>31</th>
+<td>Block</td>
+<td>Killed</td>
+<td>56
+:
+15</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>32</th>
+<td>Block</td>
+<td>Killed</td>
+<td>61
+:
+93</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>33</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>62
+:
+12</td>
+<td><code>.    ...    .</code></td>
+<td><code></code></td></tr>
+<tr><th>34</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>62
+:
+12</td>
+<td><code>.    ...    .</code></td>
+<td><code></code></td></tr>
+<tr><th>35</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>62
+:
+29</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>36</th>
+<td>Block</td>
+<td>Killed</td>
+<td>62
+:
+50</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>37</th>
+<td>Block</td>
+<td>Killed</td>
+<td>64
+:
+15</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>38</th>
+<td>Block</td>
+<td>Killed</td>
+<td>71
+:
+91</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>39</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>73
+:
+12</td>
+<td><code>.       ===</code></td>
+<td><code></code></td></tr>
+<tr><th>40</th>
+<td>IfStatement</td>
+<td>Killed</td>
+<td>73
+:
+12</td>
+<td><code>.       ===</code></td>
+<td><code></code></td></tr>
+<tr><th>41</th>
+<td>BinaryExpression</td>
+<td>Killed</td>
+<td>73
+:
+24</td>
+<td><code>===</code></td>
+<td><code>!==</code></td></tr>
+<tr><th>42</th>
+<td>Block</td>
+<td>Killed</td>
+<td>73
+:
+31</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>43</th>
+<td>Block</td>
+<td>Killed</td>
+<td>76
+:
+15</td>
+<td><code>{
+   ...    }</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>44</th>
+<td>Block</td>
+<td>TranspileError</td>
+<td>85
+:
+83</td>
+<td><code>{
+   ...  ;
+}</code></td>
+<td><code>{}</code></td></tr>
+<tr><th>45</th>
+<td>ConditionalExpression</td>
+<td>Killed</td>
+<td>86
+:
+11</td>
+<td><code>.    ...    )</code></td>
+<td><code></code></td></tr></tbody></table></div></div></div></div>
+<footer>Generated with stryker-html-reporter generator. Visit the 
+<a href="http://stryker-mutator.github.io" target="_blank">Stryker website</a></footer></div>
+<script src="__resources/popper.js/dist/umd/popper.min.js" defer="defer"></script>
+<script src="__resources/jquery/dist/jquery.slim.min.js" defer="defer"></script>
+<script src="__resources/bootstrap/js/bootstrap.min.js" defer="defer"></script>
+<script src="__resources/stryker.js" defer="defer"></script></body></html>
