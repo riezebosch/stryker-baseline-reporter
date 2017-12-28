@@ -68,7 +68,7 @@ describe('BaselineReporter', () => {
 
             sut.onAllMutantsTested([mutant()]);
 
-            sinon.assert.calledWithMatch(write, /Good job!/);
+            sinon.assert.calledWithMatch(write, /Good job!.*At least/);
         });
 
         it('when you killed some mutants', () => {
@@ -77,7 +77,9 @@ describe('BaselineReporter', () => {
 
             sut.onAllMutantsTested([]);
 
-            sinon.assert.calledWithMatch(write, /Great job!/);
+            sinon.assert.calledWithMatch(write, /Great job!.*killed some/);
+            sinon.assert.calledWithMatch(write, /You should update the baseline file right now!/);
+            sinon.assert.calledWithMatch(write, /Overwrite your baseline/);
         });
 
         it('reports new surviving mutants', () => {
@@ -85,7 +87,9 @@ describe('BaselineReporter', () => {
             let sut = new BaselineReporter(undefined, [], write);
             sut.onAllMutantsTested([mutant()]);
 
-            sinon.assert.calledWithMatch(write, /Shame on you!/);
+            sinon.assert.calledWithMatch(write, /Shame on you!.*mutants survived/);
+            sinon.assert.calledWithMatch(write, /you should update the baseline/);
+            sinon.assert.calledWithMatch(write, /Overwrite your baseline/);
         });
 
         it('also reports no coverage mutants', () => {
@@ -118,7 +122,8 @@ describe('BaselineReporter', () => {
             result.mutatedLines = result.mutatedLines + 'asdf';
             sut.onAllMutantsTested([result]);
 
-            sinon.assert.calledWithMatch(write, /Mixed feelings/);
+            sinon.assert.calledWithMatch(write, /Mixed feelings.*killed some/);
+            sinon.assert.calledWithMatch(write, /Mind that updating/);
         });
 
         it('reports mildly when no baseline file was found', () => {
@@ -127,7 +132,9 @@ describe('BaselineReporter', () => {
 
             sut.onAllMutantsTested([mutant()]);
 
-            sinon.assert.calledWithMatch(write, /No hard feelings/);
+            sinon.assert.calledWithMatch(write, /No hard feelings.*it may be not your fault after all/);
+            sinon.assert.calledWithMatch(write, /Copy the baseline/);
+            sinon.assert.calledWithMatch(write, /Mind though that including/);
         });
 
         it('reports with great joy when no baseline is needed', () => {
@@ -136,7 +143,8 @@ describe('BaselineReporter', () => {
 
             sut.onAllMutantsTested([]);
 
-            sinon.assert.calledWithMatch(write, /You rock!/);
+            sinon.assert.calledWithMatch(write, /You rock!.*No surviving mutants/);
+            sinon.assert.calledWithMatch(write, /Who needs a baseline file anyway/);
         });
     });
 
@@ -167,6 +175,10 @@ describe('BaselineReporter', () => {
 
         it('nothing when no file', () => {
             expect(read('asdf')).to.eq(undefined);
+        });
+
+        it('defaults to stryker.baseline.js', () => {
+            expect(read()).to.not.eq(undefined);
         });
     });
 });

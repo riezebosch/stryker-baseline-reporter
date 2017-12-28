@@ -1,7 +1,7 @@
 import { MutantResult, Reporter, MutantStatus } from 'stryker-api/report';
 
 import * as fs from 'mz/fs';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { StrykerOptions } from 'stryker-api/core';
 import * as _ from 'lodash';
 const tempy = require('tempy');
@@ -50,7 +50,7 @@ export default class implements Reporter {
     }
 
     private ReportDifferenceWithBaseline(surviving: MutantResult[], baseline: MutantResult[]) {
-        let fresh = _.differenceWith(surviving, this.baseline, (lhs: MutantResult, rhs: MutantResult) => this.compare(lhs, rhs));
+        let fresh = _.differenceWith(surviving, baseline, (lhs: MutantResult, rhs: MutantResult) => this.compare(lhs, rhs));
 
         if (fresh.length === 0) {
             this.ReportNoNewSurvivingMutants(surviving, baseline);
@@ -83,6 +83,6 @@ export default class implements Reporter {
     }
 }
 
-export function read(filename = 'stryker.baseline.js'): MutantResult[] | undefined {
-    return fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, 'utf-8')) : undefined;
+export function read(filename = 'stryker.baseline.js'): MutantResult[] {
+    return fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, '')) : undefined;
 }
